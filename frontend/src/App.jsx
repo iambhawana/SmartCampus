@@ -222,6 +222,7 @@ const body = isAdminRegister
     onClick={() => {
       setShowAuth(true);
       setAuthMode("login");
+      setIsAdminRegister(false);
       setAuthMessage("");
     }}
   >
