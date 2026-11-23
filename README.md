@@ -34,8 +34,27 @@ Complaint Status
 Project Structure
 
 SmartCampus/
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── ...
+│
 ├── backend/
-└── frontend/
+│   ├── routes/
+│   ├── models/
+│   ├── middleware/
+│   ├── package.json
+│   └── ...
+│
+├── screenshots/
+│   ├── home.png
+│   ├── complaint-form.png
+│   ├── complaint-tracking.png
+│   └── admin-dashboard.png
+│
+└── README.md
 
 Purpose
 
@@ -44,3 +63,15 @@ The main purpose of SmartCampus is to make campus complaint management more tran
 Developed For
 
 Academic Project – B.Tech Computer Science & Engineering
+
+## Project Screenshots
+
+### Home Page
+![SmartCampus Home Page](Screenshot%202026-11-23%20225504.png)
+
+### Student Dashboard
+![SmartCampus Student Dashboard](Screenshot%202026-11-23%20225730.png)
+
+### Admin Dashboard
+![SmartCampus Admin Dashboard](Screenshot%202026-11-23%20230012.png)
+
