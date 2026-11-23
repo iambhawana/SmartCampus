@@ -8,6 +8,8 @@ const [allComplaints, setAllComplaints] = useState([]);
 const [showAdmin, setShowAdmin] = useState(false);
 const [showAuth, setShowAuth] = useState(false);
 const [authMode, setAuthMode] = useState("login");
+const [isAdminRegister, setIsAdminRegister] = useState(false);
+const [adminKey, setAdminKey] = useState("");
 const [authMessage, setAuthMessage] = useState("");
 const [loggedInUser, setLoggedInUser] = useState(null);
 const [authName, setAuthName] = useState("");
@@ -86,31 +88,39 @@ const handleAuth = async (e) => {
   setAuthMessage("");
 
   try {
-    const endpoint = authMode === "register" ? "register" : "login";
-
-    const body =
-      authMode === "register"
-        ? {
-            name: authName,
-            email: authEmail,
-            password: authPassword,
-          }
-        : {
-            email: authEmail,
-            password: authPassword,
-          };
-
-    const response = await fetch(
-      `https://smartcampus-backend-lt65.onrender.com/api/auth/${endpoint}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      }
-    );
-
+  const endpoint = isAdminRegister
+  ? "admin-register"
+  : authMode === "register"
+  ? "register"
+  : "login";
+const body = isAdminRegister
+  ? {
+      name: authName,
+      email: authEmail,
+      password: authPassword,
+      adminKey: adminKey,
+    }
+  : authMode === "register"
+  ? {
+      name: authName,
+      email: authEmail,
+      password: authPassword,
+    }
+  : {
+      email: authEmail,
+      password: authPassword,
+    };
+  
+  const response = await fetch(
+    `https://smartcampus-backend-lt65.onrender.com/api/auth/${endpoint}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    }
+  );
     const data = await response.json();
 
     if (!response.ok) {
@@ -118,13 +128,20 @@ const handleAuth = async (e) => {
       return;
     }
 
-    if (authMode === "register") {
-      setAuthMessage("Registration successful! Please login.");
-      setAuthMode("login");
-      setAuthName("");
-      setAuthPassword("");
-      return;
-    }
+    if (authMode === "register" || isAdminRegister) {
+  setAuthMessage(
+    isAdminRegister
+      ? "Admin registration successful! Please login."
+      : "Registration successful! Please login."
+  );
+
+  setAuthMode("login");
+  setIsAdminRegister(false);
+  setAdminKey("");
+  setAuthName("");
+  setAuthPassword("");
+  return;
+}
 
     localStorage.setItem("token", data.token);
     setLoggedInUser(data.user);
@@ -211,6 +228,17 @@ const handleAuth = async (e) => {
     Student Login
   </button>
 )}
+<button
+  style={styles.button}
+  onClick={() => {
+    setShowAuth(true);
+    setAuthMode("register");
+    setIsAdminRegister(true);
+    setAuthMessage("");
+  }}
+>
+  Admin Registration
+</button>
 {loggedInUser?.role === "admin" && (
           <button
   style={styles.button}
@@ -293,6 +321,26 @@ const handleAuth = async (e) => {
             />
           </>
         )}
+        {isAdminRegister && (
+  <>
+    <label>Admin Secret Key</label>
+    <input
+      type="password"
+      value={adminKey}
+      onChange={(e) => setAdminKey(e.target.value)}
+      placeholder="Enter admin secret key"
+      required
+      style={{
+        width: "100%",
+        padding: "12px",
+        margin: "10px 0 18px",
+        border: "1px solid #ddd",
+        borderRadius: "6px",
+        boxSizing: "border-box"
+      }}
+    />
+  </>
+)}
 
         <label>Email Address</label>
         <input
