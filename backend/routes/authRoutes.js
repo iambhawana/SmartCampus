@@ -44,6 +44,51 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// Admin Registration (protected by secret key)
+router.post("/admin-register", async (req, res) => {
+  try {
+    const { name, email, password, adminKey } = req.body;
+
+    if (!name || !email || !password || !adminKey) {
+      return res.status(400).json({
+        message: "Please fill all fields",
+      });
+    }
+
+    if (adminKey !== process.env.ADMIN_SECRET) {
+      return res.status(403).json({
+        message: "Invalid admin key",
+      });
+    }
+
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "Email already registered",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: "admin",
+    });
+
+    res.status(201).json({
+      message: "Admin registration successful",
+      userId: user._id,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Admin registration failed",
+    });
+  }
+});
+
 // Login
 router.post("/login", async (req, res) => {
   try {
