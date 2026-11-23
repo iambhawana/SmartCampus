@@ -29,7 +29,7 @@ const trackComplaint = async () => {
 
   try {
     const response = await fetch(
-      `http://localhost:5000/api/complaints/${complaintId.trim()}`
+      `https://smartcampus-backend-lt65.onrender.com/api/complaints/${complaintId.trim()}`
     );
 
     const data = await response.json();
@@ -47,7 +47,7 @@ const trackComplaint = async () => {
 };
 const fetchComplaints = async () => {
   try {
-    const response = await fetch("http://localhost:5000/api/complaints", {
+    const response = await fetch("https://smartcampus-backend-lt65.onrender.com/api/complaints", {
   headers: {
     Authorization: `Bearer ${localStorage.getItem("token")}`
   }
@@ -101,7 +101,7 @@ const handleAuth = async (e) => {
           };
 
     const response = await fetch(
-      `http://localhost:5000/api/auth/${endpoint}`,
+      `https://smartcampus-backend-lt65.onrender.com/api/auth/${endpoint}`,
       {
         method: "POST",
         headers: {
@@ -577,7 +577,7 @@ const handleAuth = async (e) => {
   onChange={async (e) => {
     const newStatus = e.target.value;
 
-    await fetch(`http://localhost:5000/api/complaints/${complaint._id}`, {
+    await fetch(`https://smartcampus-backend-lt65.onrender.com/api/complaints/${complaint._id}`, {
       method: "PATCH",
       headers: {
   "Content-Type": "application/json",
@@ -796,7 +796,7 @@ const handleAuth = async (e) => {
   const complaint = Object.fromEntries(formData.entries());
 
   try {
-    const response = await fetch("http://localhost:5000/api/complaints", {
+    const response = await fetch("https://smartcampus-backend-lt65.onrender.com/api/complaints", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
